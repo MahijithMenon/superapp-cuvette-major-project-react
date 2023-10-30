@@ -1,14 +1,28 @@
 import GenreBox from '../components/GenreBox';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Category = () => {
   const [userSelectedGenre, setUserSelectedGenre] = useState([]);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const categoryPageStyle = {
     background: '#000000',
     display: 'flex',
   };
 
+  const handleClickbtn = () => {
+    if (userSelectedGenre.length < 3) {
+      setError('Please select atleast 3 genres');
+      return;
+    }
+    localStorage.setItem(
+      'userSelectedGenre',
+      JSON.stringify(userSelectedGenre)
+    );
+    navigate('/');
+  };
   const handleDelete = (genre) => {
     let newArr = userSelectedGenre.filter((item) => item !== genre);
     setUserSelectedGenre(newArr);
@@ -33,6 +47,7 @@ const Category = () => {
         <p style={{ color: '#FFFFFF' }}>Choose your entertainment category</p>
         <div>
           <p style={{ color: '#FFFFFF' }}>Selected Genre:</p>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
           <div>
             {userSelectedGenre.map((genre, index) => (
               <div
@@ -89,6 +104,7 @@ const Category = () => {
               background: '#148A08',
               color: '#FFFFFF',
             }}
+            onClick={handleClickbtn}
           >
             Next Page
           </button>

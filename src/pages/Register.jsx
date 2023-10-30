@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import photo from '../assets/image.png';
+import { useNavigate } from 'react-router-dom';
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
@@ -8,6 +9,7 @@ function Register() {
     phone: '',
     isChecked: false,
   });
+  const navigate = useNavigate();
   const [error, setError] = useState({
     name: '',
     username: '',
@@ -105,6 +107,13 @@ function Register() {
     }
 
     setError(newError);
+
+    if (Object.keys(newError).length > 0) {
+      return;
+    } else {
+      localStorage.setItem('userDetails', JSON.stringify(formData));
+      navigate('/category');
+    }
   };
 
   const errorParaStyles = {
@@ -181,13 +190,15 @@ function Register() {
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <input
               type="checkbox"
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData((prev) => ({
                   ...prev,
                   isChecked: e.target.checked,
-                }))
-              }
+                }));
+                setError({ ...error, isChecked: false });
+              }}
             />
+
             <p>Share my Info with SuperApp </p>
           </div>
           {error.isChecked && <p style={errorParaStyles}>{error.isChecked}</p>}
