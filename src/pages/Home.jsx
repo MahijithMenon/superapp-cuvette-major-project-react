@@ -1,21 +1,33 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import UserProfile from '../components/UserProfile';
 
 const Home = () => {
+  let userDetails = useRef(null);
+  let userSelectedGenre = useRef(null);
+  let userDetailsString = useRef(null);
+  let userSelectedGenreString = useRef(null);
   useEffect(() => {
-    const userDetailsString = localStorage.getItem('userDetails');
-    const userSelectedGenreString = localStorage.getItem('userSelectedGenre');
+    userDetailsString.current = localStorage.getItem('userDetails');
+    userSelectedGenreString.current = localStorage.getItem('userSelectedGenre');
 
-    const userDetails = userDetailsString
-      ? JSON.parse(userDetailsString)
+    userDetails.current = userDetailsString.current
+      ? JSON.parse(userDetailsString.current)
       : null;
-    const userSelectedGenre = userSelectedGenreString
-      ? JSON.parse(userSelectedGenreString)
+    userSelectedGenre.current = userSelectedGenreString.current
+      ? JSON.parse(userSelectedGenreString.current)
       : null;
 
-    console.log(userDetails, userSelectedGenre);
+    // console.log(userDetails.current, userSelectedGenre.current);
   }, []);
 
-  return <div></div>;
+  return (
+    <div>
+      <UserProfile
+        userDetails={userDetails.current}
+        userSelectedGenre={userSelectedGenre.current}
+      />
+    </div>
+  );
 };
 
 export default Home;
